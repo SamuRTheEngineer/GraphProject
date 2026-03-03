@@ -1,0 +1,15 @@
+# IntelliJ
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# Build folders
+out/
+target/
+build/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -58,7 +58,6 @@ public class BellmanFordAdapted implements StepAlgorithm<BellmanFordAdaptedResul
         }
 
         Edge edge = edges.get(currentEdgeIndex);
-        currentEdgeIndex++;
 
         int u = edge.getFrom();
         int v = edge.getTo();
@@ -66,6 +65,15 @@ public class BellmanFordAdapted implements StepAlgorithm<BellmanFordAdaptedResul
         boolean updated = false;
 
         if (gain[u] != Integer.MIN_VALUE) {
+            /*
+           En Bellman-Ford, gain[u] ya incluye las víctimas de todos los nodos
+           en el mejor camino encontrado hasta U.
+           Al movernos de U a V, solo sumamos las víctimas de V.
+
+           Como Bellman-Ford busca caminos simples (de hasta V-1 aristas),
+           y no sumamos gain[v] sino gain[u] + victims[v], garantizamos
+           que las víctimas de V solo se añaden una vez a la cadena de ese camino.
+        */
             int possibleGain = gain[u] + graph.getNode(v).getVictims();
 
             if (possibleGain > gain[v]) {
@@ -76,6 +84,7 @@ public class BellmanFordAdapted implements StepAlgorithm<BellmanFordAdaptedResul
         }
 
         //si se termina una pasada completa por las aristas
+        currentEdgeIndex++;
         if (currentEdgeIndex == edges.size()) {
             currentEdgeIndex = 0;
             currentIteration++;

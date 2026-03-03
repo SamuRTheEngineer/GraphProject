@@ -10,9 +10,24 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class ControlPane extends VBox {
 
     private StepAlgorithm<?> algorithm;
+
+    private List<Integer> getPathList(int[] parent, int target) {
+        List<Integer> path = new ArrayList<>();
+        int current = target;
+        while (current != -1) {
+            path.add(current);
+            current = parent[current];
+        }
+        Collections.reverse(path);
+        return path;
+    }
 
     private String buildPath(int[] parent, int target) {
         StringBuilder sb = new StringBuilder();
@@ -185,8 +200,13 @@ public class ControlPane extends VBox {
                     ft.setToValue(1);
                     ft.play();
 
+                    List<Integer> fullPath = getPathList(parent, target);
+
                     pathLabel.setText("📍 " + buildPath(parent, target));
                     weightLabel.setText("🏁 COSTO TOTAL: " + distance[target]);
+
+                    graphPane.highlightPath(fullPath);
+
                 } else if (algorithm instanceof BellmanFordAdapted bellmanFordAdapted) {
 
                     BellmanFordAdaptedResult result = bellmanFordAdapted.getResult();
@@ -215,8 +235,13 @@ public class ControlPane extends VBox {
                     ft.setToValue(1);
                     ft.play();
 
+
+                    List<Integer> fullPath = getPathList(parent, target);
                     pathLabel.setText("📍 " + buildPath(parent, target));
                     weightLabel.setText("🏁 GANANCIA TOTAL: " + gain[target]);
+
+                    graphPane.highlightPath(fullPath);
+
                 }
             }
         });

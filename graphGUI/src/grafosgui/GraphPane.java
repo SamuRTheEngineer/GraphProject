@@ -32,6 +32,37 @@ public class GraphPane extends Pane {
         // Las aristas se actualizan solas gracias al "bind" de JavaFX
     }
 
+    public void highlightPath(List<Integer> path) {
+        if (path == null || path.size() < 2) return;
+
+        //limpiar resaltados anteriores
+        nodes.values().forEach(NodeView::setDefaultColor);
+        edges.forEach(EdgeView::setDefaultColor);
+
+        for (int i = 0; i < path.size() - 1; i++) {
+            int u = path.get(i);
+            int v = path.get(i + 1);
+
+            // resaltar el nodo
+            nodes.get(u).setCurrentColor();
+
+            // buscar y resaltar la arista entre u y v
+            for (EdgeView ev : edges) {
+                if (graph.isDirected()) {
+                    if (ev.getFrom() == u && ev.getTo() == v) {
+                        ev.setActiveColor();
+                    }
+                } else {
+                    if ((ev.getFrom() == u && ev.getTo() == v) || (ev.getFrom() == v && ev.getTo() == u)) {
+                        ev.setActiveColor();
+                    }
+                }
+            }
+        }
+        // resaltar el último nodo (el destino)
+        nodes.get(path.get(path.size() - 1)).setCurrentColor();
+    }
+
     private void drawGraph() {
         getChildren().clear();
         nodes.clear();

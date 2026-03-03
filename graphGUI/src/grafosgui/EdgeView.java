@@ -112,6 +112,7 @@ public class EdgeView extends Group {
         if (arrowHead != null) arrowHead.setFill(Color.web("#95a5a6", 0.7));
     }
 
+
     public void setActiveColor() {
         line.setStroke(Color.web("#e74c3c"));
         weightText.setFill(Color.web("#e74c3c"));

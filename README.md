@@ -74,7 +74,7 @@ Se puede elegir si el grafo es dirigido o no dirigido.
 1. Clonar el repositorio.
 2. Abrirlo en el IDE de Java de preferencia.
 3. Asegurarse de tener configurado el SDK de JavaFX.
-4. Ejecutar:
+4. Ejecutar la clase MainApp.java:
 
 ```
 graphGUI/src/grafosgui/MainApp.java

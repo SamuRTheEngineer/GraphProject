@@ -6,11 +6,13 @@ public class BellmanFordAdaptedResult implements AlgorithmResult {
 
     private final int[] gain;
     private final int[] parent;
+    private boolean positiveCycleDetected;
 
 
-    public BellmanFordAdaptedResult(int[] gain, int[] parent) {
+    public BellmanFordAdaptedResult(int[] gain, int[] parent, boolean positiveCycleDetected) {
         this.gain = gain;
         this.parent = parent;
+        this.positiveCycleDetected = positiveCycleDetected;
     }
 
     public int[] getGain() {
@@ -19,5 +21,9 @@ public class BellmanFordAdaptedResult implements AlgorithmResult {
 
     public int[] getParent() {
         return parent;
+    }
+
+    public boolean isPositiveCycleDetected() {
+        return positiveCycleDetected;
     }
 }

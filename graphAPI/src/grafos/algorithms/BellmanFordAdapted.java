@@ -22,6 +22,10 @@ public class BellmanFordAdapted implements StepAlgorithm<BellmanFordAdaptedResul
     private int currentIteration;
     private int currentEdgeIndex;
 
+    private boolean positiveCycleDetected = false;
+    private boolean finished = false;
+    private boolean changedInThisIteration = false;
+
     @Override
     public void initialize(Graph graph, int start) {
 
@@ -47,7 +51,7 @@ public class BellmanFordAdapted implements StepAlgorithm<BellmanFordAdaptedResul
 
     @Override
     public boolean hasNextStep() {
-        return currentIteration < V-1;
+        return currentIteration < V && !finished;
     }
 
     @Override
@@ -70,24 +74,41 @@ public class BellmanFordAdapted implements StepAlgorithm<BellmanFordAdaptedResul
            en el mejor camino encontrado hasta U.
            Al movernos de U a V, solo sumamos las víctimas de V.
 
-           Como Bellman-Ford busca caminos simples (de hasta V-1 aristas),
-           y no sumamos gain[v] sino gain[u] + victims[v], garantizamos
-           que las víctimas de V solo se añaden una vez a la cadena de ese camino.
+           Como Bellman-Ford garantiza que la mejor solución encontrada tiene a lo sumo V-1 aristas, evitando ciclos en el resultado final cuando no hay ciclos positivos.
         */
             int possibleGain = gain[u] + graph.getNode(v).getVictims();
 
             if (possibleGain > gain[v]) {
-                gain[v] = possibleGain;
-                parent[v] = u;
-                updated = true;
+
+                if (currentIteration == V-1) { //si estamos en la V y hay mejora, ent ciclo positivo.
+                    positiveCycleDetected = true;
+                    finished = true;
+                } else {
+                    gain[v] = possibleGain;
+                    parent[v] = u;
+                    updated = true;
+                    changedInThisIteration = true;
+                }
             }
         }
 
-        //si se termina una pasada completa por las aristas
         currentEdgeIndex++;
+
+        //si se termina una pasada completa por las aristas
         if (currentEdgeIndex == edges.size()) {
             currentEdgeIndex = 0;
             currentIteration++;
+
+            if (!changedInThisIteration) {//si en toda la vuelta no hubo un solo cambio, el algoritmo converge
+                finished = true;
+            }
+
+            if (currentIteration >= V) { //si llegamos a iteracion V, para
+                finished = true;
+            }
+
+            changedInThisIteration = false; //para la siguiente vuelta
+
         }
 
         return new AlgorithmStep(
@@ -102,7 +123,7 @@ public class BellmanFordAdapted implements StepAlgorithm<BellmanFordAdaptedResul
 
     @Override
     public BellmanFordAdaptedResult getResult() {
-        return new BellmanFordAdaptedResult(gain, parent);
+        return new BellmanFordAdaptedResult(gain, parent, positiveCycleDetected);
     }
 
     @Override

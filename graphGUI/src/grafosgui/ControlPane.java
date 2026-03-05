@@ -214,6 +214,7 @@ public class ControlPane extends VBox {
                     int[] gain = result.getGain();
                     int target;
 
+
                     try {
                         target = Integer.parseInt(targetField.getText());
                     } catch (NumberFormatException ex) {
@@ -230,6 +231,13 @@ public class ControlPane extends VBox {
                         weightLabel.setText("Ganancia: -∞");
                         return;
                     }
+
+                    if (result.isPositiveCycleDetected()) {
+                        pathLabel.setText("🚫 Ciclo Positivo Detectado");
+                        weightLabel.setText("Ganancia: ∞");
+                        return;
+                    }
+
                     FadeTransition ft = new FadeTransition(Duration.millis(500), resultBox);
                     ft.setFromValue(0);
                     ft.setToValue(1);

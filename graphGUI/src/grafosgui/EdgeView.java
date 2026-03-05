@@ -16,12 +16,13 @@ public class EdgeView extends Group {
     private final Polygon arrowHead;
     private final Text weightText; // Nuevo: Texto del peso
     private final boolean isDirected;
+    private final double radius;
 
     public EdgeView(NodeView startNode, NodeView endNode, int weight, boolean isDirected) {
         this.from = startNode.getNodeId();
         this.to = endNode.getNodeId();
         this.isDirected = isDirected;
-
+        this.radius = endNode.getRadius();
         line = new Line();
 
         // Vincular la línea a los centros de los nodos
@@ -61,7 +62,7 @@ public class EdgeView extends Group {
     }
 
     private Polygon createArrowHead(double x1, double y1, double x2, double y2) {
-        double radius = 25; // Radio del nodo para que la flecha quede en el borde, no en el centro
+        double radius = this.radius; // Radio del nodo para que la flecha quede en el borde, no en el centro
         double angle = Math.atan2((y2 - y1), (x2 - x1));
 
         // Ajustar el punto final para que la flecha toque el borde del círculo
@@ -91,7 +92,7 @@ public class EdgeView extends Group {
         double x2 = line.getEndX();
         double y2 = line.getEndY();
 
-        double radius = 28;
+        double radius = this.radius; // Radio del nodo para que la flecha quede en el borde, no en el centro
         double angle = Math.atan2((y2 - y1), (x2 - x1));
         double endX = x2 - radius * Math.cos(angle);
         double endY = y2 - radius * Math.sin(angle);

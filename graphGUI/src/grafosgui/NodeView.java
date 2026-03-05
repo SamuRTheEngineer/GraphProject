@@ -13,16 +13,17 @@ public class NodeView extends StackPane {
     private final Text label;
     private final Text subtitle;
     private double mouseX, mouseY;
-
+    private final double radius;
 
     public int getNodeId() {
         return id;
     }
-
+    public double getRadius() {return radius;}
     public NodeView(int id, int victims, double x, double y) {
         this.id = id;
-
-        circle = new Circle(22 + victims * 1.5);        circle.setStroke(Color.WHITE);
+        this.radius = 22 + victims * 1.5;
+        circle = new Circle(radius);
+        circle.setStroke(Color.WHITE);
         circle.setStrokeWidth(2);
 
         //sombra
